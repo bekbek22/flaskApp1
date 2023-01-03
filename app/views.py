@@ -101,7 +101,7 @@ def lab06_courses():
 
 @app.route('/lab07/')
 def lab07_form_validation():
-    return app.send_static_file('directory/lab07_form_validation.html')
+    return app.send_static_file('lab07_form_validation.html')
 
 @app.route('/lab07b/')
 def lab07b():
