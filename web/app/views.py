@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 from app import app
 from app import db
 from app.models.contact import Contact
+from app.models.blog_entries import BlogEntry
 
 @app.route('/')
 def home():
@@ -92,3 +93,21 @@ def lab10_remove_contacts():
             app.logger.debug(ex)
             raise
     return lab10_db_contacts()
+
+@app.route('/lab11')
+def lab11_microblog():
+    return app.send_static_file('lab11_microblog.html')
+
+@app.route('/lab11/blog')
+def lab11_blog():
+    blog_entries = []
+    db_blog = BlogEntry.query.all()
+    
+    blog_entries = list(map(lambda x: x.to_dict(), db_blog))
+    app.logger.debug("DB Blog : " + str(blog_entries))
+    
+    return jsonify(blog_entries)
+
+@app.route('/playground')
+def playground():
+    return app.send_static_file('playground.html')
