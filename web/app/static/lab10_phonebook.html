@@ -72,6 +72,7 @@
       </thead>
     </table>
   </div>
+  
   <script>
     function populate_table(contact_data) {
       $('#phonebook-table').bootstrapTable({
@@ -83,10 +84,6 @@
         $.getJSON("lab10/contacts", populate_table);
       })();
     });
-     // refresh the table after a read update
-     function refresh_table(contact_data) {
-      $('#phonebook-table').bootstrapTable('load', contact_data);
-    }
 
     $("#addPhoneNumberForm").submit(function (event) {
       // prevent default html form submission action
@@ -113,6 +110,10 @@
         clearForm();
       });
     });
+
+    function refresh_table(contact_data) {
+      $('#phonebook-table').bootstrapTable('load', contact_data);
+    }
 
     function clearForm() {
       $('#addPhoneNumberForm')[0].reset();
