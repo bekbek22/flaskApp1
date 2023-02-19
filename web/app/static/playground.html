@@ -21,47 +21,18 @@
  
 <body>
 <!-- A button to open the popup form -->
-<nav class="navbar navbar-expand-md navbar-light">
-  <div class="container">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="#"><span class="oi oi-home"></span> Home</a>
-      <a class="nav-item nav-link" href="#"><span class="oi oi-bolt"></span> Moments</a>
-      <a class="nav-item nav-link" href="#"><span class="oi oi-bell"></span> Notifications</a>
-      <a class="nav-item nav-link" href="#"><span class="oi oi-envelope-open"></span> Messages</a>
-    </div>
-    <form class="form-inline">
-      <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
-      <img class="tw-user-small rounded-circle" src="static/img/tweeterUserSmall.jpg"> &nbsp;
-      <button class="btn" id="nav-tweet-btn" onclick="openForm()">Tweet</button>
-    </form>
-  </div>
-</nav>
-<button class="open-button" onclick="openForm()">Open Form</button>
-
-<!-- The form -->
-<div class="form-popup" id="myForm">
-  <form action="/action_page.php" class="form-container">
-    <h1>Login</h1>
-
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-    <button type="submit" class="btn">Login</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-  </form>
+<div id="div1">
+  <p id="p1">This is a paragraph.</p>
+  <p id="p2">This is another paragraph.</p>
 </div>
 
-<script> 
-  function openForm() {
-    document.getElementById("myForm").style.display = "block";
-  }
-  
-  function closeForm() {
-    document.getElementById("myForm").style.display = "none";
-  }
+<script>
+const para = document.createElement("p");
+const node = document.createTextNode("This is new.");
+para.appendChild(node);
+
+const element = document.getElementById("div1");
+element.appendChild(para);
 </script>
 </body>
  
