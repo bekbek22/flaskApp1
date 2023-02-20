@@ -171,10 +171,6 @@
 
       });
 
-      $("#remove").click(function (e, value, row, index) {
-        removeItem(row);
-      });
-
       function removeItem(id) {
         if (!confirm("Hello, ArE y0u SUrE ?")) {
           return false;
@@ -196,7 +192,7 @@
                 $('#message').val(i.message);
                 $('#email').val(i.email);
                 $('#entryid').val(i.id);
-  
+                $('#datetime_updated').val(i.datetime_updated);
               }
             });
           });
