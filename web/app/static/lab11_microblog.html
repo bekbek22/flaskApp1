@@ -11,16 +11,19 @@
   <!-- Bootstrap Table -->
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css">
   <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
   <!-- our own css -->
   <link rel="stylesheet" href="static/css/phonebook.css">
   <link rel="stylesheet" href="static/css/mytwitter.css">
-  <link rel="stylesheet" href="static/css/playground.css">
   <link type="text/css" rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Kanit">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My microblog</title>
 </head>
  
 <body>
+
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
           <div class="navbar-nav">
@@ -38,8 +41,7 @@
     </nav>
     <!--Tweet button-->
     <!--Form -->
-
-    <div class="container">
+    <div class="container" >
         <div class="row">
           <div id="left_3" class="col-md-3">
             <div class="content-box">Account details</div>
@@ -54,21 +56,22 @@
                         <img src="static/img/tweeterUserSmall.jpg" class="tw-user-small rounded-circle mx-auto d-block">
                       </div>
                       <div class="col-md-9">
-                        <form class="form-container" id="addPhoneNumberForm">
+                        <form class="form-container" id="addPostForm">
                           <label for="name">Name</label>
                           <input type="text" id="name" name="name" placeholder="YourName..." required>
                           <label for="message">Message</label>
                           <input type="text" id="message" name="message" placeholder="YourMessage..." required>
                           <label for="email">Email</label>
-                          <input type="text" id="email" name="email" placeholder="YourEmail..." required>
+                          <input type="email" id="email" name="email" placeholder="YourEmail..." required>
                           <input type="hidden" id="entryid" name="id" value="">
-                          <button type="submit" class="btn" id="nav-tweet-btn" name="submit">Tweet</button>
-                          <button type="button" class="btn clear">Clear</button>
+                          <input type="submit" class="btn" id="nav-tweet-btn" name="submit" value="Tweet" onclick="refresh_table()"> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
+                          <button type="button" class="clear">Clear</button>
                         </form>
                       </div>
                   </div>
               </div>
          </div>
+         
 
          <div class="tweet" id="post">
             <div class="row">
@@ -76,54 +79,37 @@
 
                 </div>            
                 <div class="col-md-10">
-                    <div class="row tweet-info">
+                    <div class="row tweet-info" id="tweet-info">
                         <div class="col-md-auto">
                           <span class="tweet-username" id="name"></span>
                           <span class="tweet-usertag text-muted" id="email"></span>
-                          <span class="tweet-age text-muted" id="datetime_created"></span>
                         </div>
-                        <div class="col tweet-arrow text-muted">
-                          <span class="oi oi-arrow-thick-bottom float-right"></span>
-                        </div>
-                      </div>
-                      <div class="tweet-text" id="message">
+                    </div>
+                    <div class="tweet-text" id="message">
 
-                      </div>
-                      <div class="tweet-media">
-
-                      </div>
-                      <div class="row text-muted">
-                        <div class="col-md-2"><span class="oi oi-bullhorn"></span></div>
-                        <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
-                        <div class="col-md-2"><span class="oi oi-heart"></span></div>
-                        <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-
+                    </div>
+                    <div class="tweet-media" >
+                     
+                    </div>
+                    <div class="row text-muted">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
 
-      function openForm() {
-        document.getElementById("myForm").style.display = "block";
-      }
-      
-      function closeForm() {
-        document.getElementById("myForm").style.display = "none";
-      }
-
       function populate_table(contact_data) {
-        var blogpsot = document.getElementById("post");
 
         //The forEach() method calls a function for each element in an array.
         //The Object.keys() static method returns an array of a given object's own enumerable string-keyed property names.
-        
+
         Object.keys(contact_data).reverse().forEach(function (i) {
           var data = contact_data[i];
           var para = document.createElement("div");
+          
           para.innerHTML = `
 
           <div class="tweet" id="post">
@@ -132,27 +118,24 @@
                     <img class="tw-user-medium rounded-circle" src="static/img/tweeterUserSmall.jpg">
                 </div>            
                 <div class="col-md-10">
-                    <div class="row tweet-info">
+                    <div class="row tweet-info" id="tweet-info">
                         <div class="col-md-auto">
                           <span class="tweet-username" id="name">${data.name}</span>
                           <span class="tweet-usertag text-muted" id="email">${data.email}</span> 
-                          <span class="tweet-age text-muted" id="datetime_created">${data.datetime_created}</span>
                         </div>
-                        <div class="col tweet-arrow text-muted">
-                          <span class="oi oi-arrow-thick-bottom float-right"></span>
-                        </div>
+
                       </div>
                       <div class="tweet-text" id="message">
                             ${data.message}
                       </div>
                       <div class="tweet-media">
-                            
+                        <br>
+                        <span class="tweet-age text-muted" id="datetime_created">created: ${data.datetime_created}</span>
+                        <br>
+                        <span class="tweet-age text-muted" id="datetime_updated">updated: ${data.datetime_updated}</span>
                       </div>
                       <div class="row text-muted">
-                        <div class="col-md-2"><span class="oi oi-bullhorn"></span></div>
-                        <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
-                        <div class="col-md-2"><span class="oi oi-heart"></span></div>
-                        <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
+                        <br>
                       </div>
                   </div>
               </div>
@@ -163,7 +146,6 @@
         var element = document.getElementById("post");
         element.appendChild(para);
         });
-
       }
 
 
@@ -171,36 +153,47 @@
         (function () {
           $.getJSON("lab11/blog", populate_table);
         })();
+
       });
   
-      $("#addPhoneNumberForm").submit(function (event) {
-        // prevent default html form submission action
+      function refresh_table(contact_data) {
+        document.getElementById("post").innerHTML = "";
+        document.getElementById("post").addEventListener("load", populate_table(contact_data));
+        
+      }
+  
+  
+      $("#addPostForm").submit(function (event) {
+        // Stop form from submitting normally
         event.preventDefault();
-      
-        // pack the inputs into a dictionary
+  
+  
         var formData = {};
         $(":input").each(function () {
           var key = $(this).attr('name');
           var val = $(this).val();
   
+  
           if (key != 'submit') {
             formData[key] = val;
           }
   
+  
         });
+  
   
         var $form = $(this);
         var url = $form.attr("action");
-  
-        // make a POST call to the back end w/ a callback to refresh the table
         $.post(url, formData, function (contact_data) {
           refresh_table(contact_data);
-          clearForm();
+          $('#addPostForm')[0].reset();
         });
+  
       });
   
+  
       function clearForm() {
-        $('#addPhoneNumberForm')[0].reset();
+        $('#addPostForm')[0].reset();
         $('#entryid').val('');
       }
   
@@ -243,10 +236,6 @@
         $.post(url, formData, function (contact_data) {
           refresh_table(contact_data);
         });
-      }
-
-      function refresh_table(contact_data) {
-        $('#phonebook-table').bootstrapTable('load', contact_data);
       }
   
   
