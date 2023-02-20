@@ -144,7 +144,7 @@ def lab11_db_blog():
     
     return jsonify(blog_entries)
 
-@app.route('/lab11/remove_contact', methods=('GET', 'POST'))
+@app.route('/lab11/remove_blog', methods=('GET', 'POST'))
 def lab11_remove_post():
     app.logger.debug("LAB11 - REMOVE")
     if request.method == 'POST':

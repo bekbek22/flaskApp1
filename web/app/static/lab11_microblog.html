@@ -56,16 +56,16 @@
                         <img src="static/img/tweeterUserSmall.jpg" class="tw-user-small rounded-circle mx-auto d-block">
                       </div>
                       <div class="col-md-9">
-                        <form class="form-container" id="addPostForm">
+                        <form id="addPostForm">
                           <label for="name">Name</label>
                           <input type="text" id="name" name="name" placeholder="YourName..." required>
                           <label for="message">Message</label>
                           <input type="text" id="message" name="message" placeholder="YourMessage..." required>
                           <label for="email">Email</label>
-                          <input type="email" id="email" name="email" placeholder="YourEmail..." required>
+                          <input type="email" id="email" name="email" data-field="email" placeholder="YourEmail..." required>
                           <input type="hidden" id="entryid" name="id" value="">
                           <input type="submit" class="btn" id="nav-tweet-btn" name="submit" value="Tweet" onclick="refresh_table()"> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-                          <button type="button" class="clear">Clear</button>
+                          <button type="button" class="clear_form" id="clear_form">Clear</button>
                         </form>
                       </div>
                   </div>
@@ -93,13 +93,25 @@
                     </div>
                     <div class="row text-muted">
                         <br>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
     
     <script>
+
+      $("#clear_form").click(function () {
+        clearForm();
+      });
+
+      function clearForm() {
+        $('#addPostForm')[0].reset();
+        $('#entryid').val('');
+      }
 
       function populate_table(contact_data) {
 
@@ -134,8 +146,11 @@
                         <br>
                         <span class="tweet-age text-muted" id="datetime_updated">updated: ${data.datetime_updated}</span>
                       </div>
+                      <br>
                       <div class="row text-muted">
                         <br>
+                        <button type="button" class="edit" id="edit">Edit</button>
+                        <button type="button" class="remove" id="remove">Remove</button>
                       </div>
                   </div>
               </div>
@@ -155,13 +170,45 @@
         })();
 
       });
+
+      $("#remove").click(function (e, value, row, index) {
+        removeItem(row);
+      });
+
+      window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+          prePopulateForm(row);
+        },
+        'click .remove': function (e, value, row, index) {
+          removeItem(row);
+        }
+      }
+
+      function removeItem(row) {
+        if (!confirm("Delete " + row.name + ' ' + row.message + '?')) {
+          return false;
+        }
+        var url = "lab11/remove_blog"
+        var formData = { 'id': row.id };
+        $.post(url, formData, function (contact_data) {
+          refresh_table(contact_data);
+        });
+      }
+
+      function prePopulateForm(row) {
+        $('#addPostForm')[0].reset();
+        $('#name').val(row.name)
+        $('#message').val(row.message)
+        $('#email').val(row.email)
+        $('#entryid').val(row.id)
+  
+      }
   
       function refresh_table(contact_data) {
         document.getElementById("post").innerHTML = "";
         document.getElementById("post").addEventListener("load", populate_table(contact_data));
         
       }
-  
   
       $("#addPostForm").submit(function (event) {
         // Stop form from submitting normally
@@ -190,78 +237,9 @@
         });
   
       });
+
   
-  
-      function clearForm() {
-        $('#addPostForm')[0].reset();
-        $('#entryid').val('');
-      }
-  
-      function actionFormatter(value, row, index) {
-        return [
-          '<a class="edit" href="javascript:void(0)" title="Like">',
-          '✏️',
-          '</a>  ',
-          '<a class="remove" href="javascript:void(0)" title="Remove">',
-          '🗑️',
-          '</a>'
-        ].join('')
-      }
-  
-      window.operateEvents = {
-        'click .edit': function (e, value, row, index) {
-          prePopulateForm(row);
-        },
-        'click .remove': function (e, value, row, index) {
-          removeItem(row);
-        }
-      }
-  
-      function prePopulateForm(row) {
-        $('#addPhoneNumberForm')[0].reset();
-        $('#name').val(row.name)
-        $('#message').val(row.message)
-        $('#email').val(row.email)
-        $('#entryid').val(row.id)
-        $('#datetime_created').val(row.datetime_created)
-        $('#datetime_updated').val(row.datetime_updated)
-      }
-  
-      function removeItem(row) {
-        if (!confirm("Delete " + row.name + ' ' + row.message + '?')) {
-          return false;
-        }
-        var url = "lab11/remove_post"
-        var formData = { 'id': row.id };
-        $.post(url, formData, function (contact_data) {
-          refresh_table(contact_data);
-        });
-      }
-  
-  
-      function toggleView() {
-        if ($('#contact_display').attr('hidden')) {
-          $('#contact_display').removeAttr('hidden');
-          $('#add-edit').attr('hidden', 'hidden');
-        } else {
-          $('#contact_display').attr('hidden', 'hidden');
-          $('#add-edit').removeAttr('hidden');
-        }
-      }
-  
-      $("#add_contact").click(function () {
-        clearForm();
-        toggleView();
-      });
-  
-      $("#clear_form").click(function () {
-        clearForm();
-      });
-  
-      $("#cancel_form").click(function () {
-        clearForm();
-        toggleView();
-      });
+
     </script>
 
 </body>
