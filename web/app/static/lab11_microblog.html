@@ -93,7 +93,7 @@
                     </div>
                     <div class="row text-muted">
                         <br>
-                        
+                     
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
       }
 
       function populate_table(contact_data) {
-
+        
         //The forEach() method calls a function for each element in an array.
         //The Object.keys() static method returns an array of a given object's own enumerable string-keyed property names.
 
@@ -149,8 +149,8 @@
                       <br>
                       <div class="row text-muted">
                         <br>
-                        <button type="button" class="edit" id="edit">Edit</button>
-                        <button type="button" class="remove" id="remove">Remove</button>
+                        <button onclick="prePopulateForm(${data.id})" type="button" class="edit" id="edit">Edit</button>
+                        <button onclick="removeItem(${data.id})" type="button" class="remove" id="remove">Remove</button>
                       </div>
                   </div>
               </div>
@@ -175,33 +175,32 @@
         removeItem(row);
       });
 
-      window.operateEvents = {
-        'click .edit': function (e, value, row, index) {
-          prePopulateForm(row);
-        },
-        'click .remove': function (e, value, row, index) {
-          removeItem(row);
-        }
-      }
-
-      function removeItem(row) {
-        if (!confirm("Delete " + row.name + ' ' + row.message + '?')) {
+      function removeItem(id) {
+        if (!confirm("Hello, ArE y0u SUrE ?")) {
           return false;
         }
         var url = "lab11/remove_blog"
-        var formData = { 'id': row.id };
+        var formData = { 'id': id };
         $.post(url, formData, function (contact_data) {
           refresh_table(contact_data);
         });
       }
 
-      function prePopulateForm(row) {
-        $('#addPostForm')[0].reset();
-        $('#name').val(row.name)
-        $('#message').val(row.message)
-        $('#email').val(row.email)
-        $('#entryid').val(row.id)
+      function prePopulateForm(id) {
+         
+          $.getJSON("lab11/blog", function(entry){
+            entry.forEach(function(i){
+              if (i.id === id) {
+                $('#addPostForm')[0].reset();
+                $('#name').val(i.name);
+                $('#message').val(i.message);
+                $('#email').val(i.email);
+                $('#entryid').val(i.id);
   
+              }
+            });
+          });
+
       }
   
       function refresh_table(contact_data) {
