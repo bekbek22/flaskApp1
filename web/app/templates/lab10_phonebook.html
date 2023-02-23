@@ -18,6 +18,13 @@
 </head>
 
 <body>
+
+  <div id="header" class="container">
+   <div class="box3">
+     <button id="logout" type="button">Logout</button>
+   </div>
+   <h1>{{ current_user.name }}'s Phonebook</h1>
+  </div>
   <div id="header" class="container">
     <h1>Phonebook</h1>
   </div>
@@ -108,6 +115,7 @@
       $.post(url, formData, function (contact_data) {
         refresh_table(contact_data);
         clearForm();
+        toggleView()
       });
     });
 
@@ -146,7 +154,7 @@
       $('#lastname').val(row.lastname)
       $('#phone').val(row.phone)
       $('#entryid').val(row.id)
-
+      toggleView()
     }
 
     function removeItem(row) {
@@ -190,6 +198,12 @@
       clearForm();
       toggleView();
     });
+
+    $("#logout").click(function () {
+      clearForm();
+      window.location.href = "lab12/logout";
+    });
+ 
 
   </script>
 

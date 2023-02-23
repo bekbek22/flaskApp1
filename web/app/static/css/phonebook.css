@@ -27,6 +27,10 @@ label {
     width: 100px;
 }
 
+.box3 {
+    float: right;
+}
+
 
 input[type=submit],
 input[type=reset],
