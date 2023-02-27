@@ -35,7 +35,7 @@
           <form class="form-inline">
             <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
             <img class="tw-user-small rounded-circle" src="{{current_user.avatar_url}}"> &nbsp;
-            <button class="btn" id="nav-tweet-btn">Login</button>
+            <button class="btn" id="login" type="button">Login</button>
             <button class="btn" id="logout" type="button">Logout</button>
           </form>
         </div>
@@ -65,8 +65,9 @@
                           <label for="email">Email</label>
                           <input type="email" id="email" name="email" value="{{current_user.email}}" disabled>
                           <input type="hidden" id="entryid" name="id" value="">
-                          
+                          {% if current_user.is_authenticated %}
                           <input type="submit" class="btn" id="nav-tweet-btn" name="submit" value="Tweet" onclick="refresh_table()"> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
+                          {% endif %}
                           <button type="button" class="clear_form" id="clear_form">Clear</button>
                         </form>
                       </div>
@@ -128,7 +129,7 @@
           <div class="tweet" id="post">
             <div class="row">
                 <div class="col-md-2 text-center">
-                    <img class="tw-user-medium rounded-circle" src="{{current_user.avatar_url}}">
+                    <img class="tw-user-medium rounded-circle" src="${data.avatar_url}">
                 </div>            
                 <div class="col-md-10">
                     <div class="row tweet-info" id="tweet-info">
@@ -228,6 +229,11 @@
         });
   
       });
+
+      $("#login").click(function () {
+        clearForm();
+        window.location.href = "lab12/login";
+      }) 
 
       $("#logout").click(function () {
         clearForm();

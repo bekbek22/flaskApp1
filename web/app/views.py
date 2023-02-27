@@ -200,6 +200,42 @@ def lab12_index():
 def lab12_profile():
     return render_template('lab12/profile.html')
 
+@app.route('/lab12/change', methods=('GET', 'POST'))
+def lab12_change():
+    if request.method == 'POST':
+        #get password
+        password = request.form.get('password')
+        app.logger.debug("==================")
+        app.logger.debug(current_user.password)
+        app.logger.debug(password)
+        
+        if not current_user or not check_password_hash(current_user.password, password):
+            app.logger.debug("-=-=-=-=-=-=")
+            return redirect(url_for('lab12_index'))
+        
+        app.logger.debug("5555555555555555555555555555555")
+        return redirect(url_for('lab12_changeprofile'))
+        
+    return render_template('lab12/change.html')
+
+@app.route('/lab12/changeprofile', methods=('GET', 'POST'))
+def lab12_changeprofile():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        
+        changedata(name, email)
+        
+        return redirect(url_for('lab12_profile'))
+    return render_template('lab12/change.html')
+        
+def changedata(name, email):
+    db_user = AuthUser.query.filter_by(id = current_user.id).first()
+    db_user.name = name
+    db_user.email = email
+    db_user.avatar_url = gen_avatar_url(email, name)
+    db.session.commit()
+
 @app.route('/lab12/login', methods=('GET', 'POST'))
 def lab12_login():
     if request.method == 'POST':
