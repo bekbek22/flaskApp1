@@ -34,7 +34,7 @@
           </div>
           <form class="form-inline">
             <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
-            <img class="tw-user-small rounded-circle" src="static/img/tweeterUserSmall.jpg"> &nbsp;
+            <img class="tw-user-small rounded-circle" src="{{current_user.avatar_url}}"> &nbsp;
             <button class="btn" id="nav-tweet-btn">Tweet</button>
             <button class="btn" id="logout" type="button">Logout</button>
           </form>
@@ -54,16 +54,16 @@
                 <div class="new-tweet-row">
                     <div class="row">
                       <div class="col-md-2">
-                        <img src="static/img/tweeterUserSmall.jpg" class="tw-user-small rounded-circle mx-auto d-block">
+                        <img src="{{current_user.avatar_url}}" class="tw-user-small rounded-circle mx-auto d-block">
                       </div>
                       <div class="col-md-9">
                         <form id="addPostForm">
-                          <label for="name" value="{{ current_user.name }}">{{current_user.name}}</label>
-                          <input type="text" id="name" name="name" placeholder="YourName..." required>
+                          <label for="name" value="{{ current_user.name }}">Name</label>
+                          <input type="text" id="name" name="name" value="{{current_user.name}}" disabled>
                           <label for="message">Message</label>
                           <input type="text" id="message" name="message" placeholder="YourMessage..." required>
                           <label for="email">Email</label>
-                          <input type="email" id="email" name="email" data-field="email" placeholder="YourEmail..." required>
+                          <input type="email" id="email" name="email" value="{{current_user.email}}" disabled>
                           <input type="hidden" id="entryid" name="id" value="">
                           <input type="submit" class="btn" id="nav-tweet-btn" name="submit" value="Tweet" onclick="refresh_table()"> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
                           <button type="button" class="clear_form" id="clear_form">Clear</button>
@@ -128,7 +128,7 @@
           <div class="tweet" id="post">
             <div class="row">
                 <div class="col-md-2 text-center">
-                    <img class="tw-user-medium rounded-circle" src="static/img/tweeterUserSmall.jpg">
+                    <img class="tw-user-medium rounded-circle" src="{{current_user.avatar_url}}">
                 </div>            
                 <div class="col-md-10">
                     <div class="row tweet-info" id="tweet-info">
