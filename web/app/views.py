@@ -11,7 +11,7 @@ from app import db
 from app import login_manager
 from app.models.contact import Contact
 from app.models.blog_entries import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact
+from app.models.authuser import AuthUser, PrivateContact, PrivateBlog
 
 @app.route('/')
 def home():
@@ -88,7 +88,6 @@ def lab10_db_contacts():
     contacts = list(map(lambda x: x.to_dict(), db_contacts))
     app.logger.debug("DB Contacts: " + str(contacts))
 
-
     return jsonify(contacts)
 
 @app.route('/lab10/remove_contact', methods=('GET', 'POST'))
@@ -107,6 +106,7 @@ def lab10_remove_contacts():
     return lab10_db_contacts()
 
 @app.route('/lab11', methods=('GET', 'POST'))
+@login_required
 def lab11_microblog():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -114,7 +114,7 @@ def lab11_microblog():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email', 'times']
+        valid_keys = ['name', 'message', 'email']
 
         # validate the input
         for key in result:
@@ -131,30 +131,38 @@ def lab11_microblog():
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new contact entry
+            # if there is no id_: create contact
             if not id_:
-                entry = BlogEntry(**validated_dict)
+                validated_dict['owner_id'] = current_user.id
+                # entry = Contact(**validated_dict)
+                entry = PrivateBlog(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
-            # if there is an id already: update the contact entry
+            # if there is an id_ already: update contact
             else:
-                contact = BlogEntry.query.get(id_)
-                contact.update(**validated_dict)
+                # contact = Contact.query.get(id_)
+                contact = PrivateBlog.query.get(id_)
+                if contact.owner_id == current_user.id:
+                    contact.update(**validated_dict)
 
             db.session.commit()
 
+
         return lab11_db_blog()
-    return app.send_static_file('lab11_microblog.html')
+    return render_template('lab11_microblog.html')
 
 @app.route('/lab11/blog')
+@login_required
 def lab11_db_blog():
-    blog_entries = []
-    db_blog = BlogEntry.query.all()
+    # blog_entries = []
+    # db_blog = BlogEntry.query.all()
     
-    blog_entries = list(map(lambda x: x.to_dict(), db_blog))
-    app.logger.debug("DB Blog : " + str(blog_entries))
+    blog_entries = PrivateBlog.query.filter(
+        PrivateBlog.owner_id == current_user.id)
+    blogs = list(map(lambda x: x.to_dict(), blog_entries))
+    app.logger.debug("DB Contacts: " + str(blogs))
     
-    return jsonify(blog_entries)
+    return jsonify(blogs)
 
 @app.route('/lab11/remove_blog', methods=('GET', 'POST'))
 def lab11_remove_post():
@@ -208,7 +216,7 @@ def lab12_login():
         login_user(user, remember=remember)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('lab12_profile')
+            next_page = url_for('lab11_microblog')
         return redirect(next_page)
 
     return render_template('lab12/login.html')
@@ -221,7 +229,6 @@ def load_user(user_id):
 
 @app.route('/lab12/signup', methods=('GET', 'POST'))
 def lab12_signup():
-
 
     if request.method == 'POST':
         result = request.form.to_dict()

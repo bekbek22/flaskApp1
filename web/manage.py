@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from app import app, db
 from app.models.contact import Contact
 from app.models.blog_entries import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact
+from app.models.authuser import AuthUser, PrivateContact, PrivateBlog
 
 cli = FlaskGroup(app)
 
@@ -31,9 +31,20 @@ def seed_db():
     
 @cli.command("seed_microblog_db")
 def seed_microblog_db():
+    db.session.add(AuthUser(email="f@204212", name='สมหญิง ทรงแบด',
+                            password=generate_password_hash('1234',
+                                                            method='sha256'),
+                            avatar_url='https://ui-avatars.com/api/?name=\
+    สมชาย+ทรงแบด&background=83ee03&color=fff'))
+    db.session.commit()
     db.session.add(
         BlogEntry(name='ทรงแบด แซดบ่อย', message='แบดจริงไม่เถียง', email='HelloWorld@gmail.com'))
     db.session.commit()
+    db.session.add(
+        PrivateBlog(name='สมชาย ทรงแบด', message='สวัสดีครับ',
+                       email='HelloHi@gmail.com', owner_id=1))
+    db.session.commit()
+
 
 if __name__ == "__main__":
     cli()

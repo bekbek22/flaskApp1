@@ -58,7 +58,7 @@
                       </div>
                       <div class="col-md-9">
                         <form id="addPostForm">
-                          <label for="name">{{current_user.name}}</label>
+                          <label for="name" value="{{ current_user.name }}">{{current_user.name}}</label>
                           <input type="text" id="name" name="name" placeholder="YourName..." required>
                           <label for="message">Message</label>
                           <input type="text" id="message" name="message" placeholder="YourMessage..." required>
