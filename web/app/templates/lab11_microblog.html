@@ -35,7 +35,7 @@
           <form class="form-inline">
             <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
             <img class="tw-user-small rounded-circle" src="{{current_user.avatar_url}}"> &nbsp;
-            <button class="btn" id="nav-tweet-btn">Tweet</button>
+            <button class="btn" id="nav-tweet-btn">Login</button>
             <button class="btn" id="logout" type="button">Logout</button>
           </form>
         </div>
@@ -58,13 +58,14 @@
                       </div>
                       <div class="col-md-9">
                         <form id="addPostForm">
-                          <label for="name" value="{{ current_user.name }}">Name</label>
+                          <label for="name">{{ current_user.name }}</label>
                           <input type="text" id="name" name="name" value="{{current_user.name}}" disabled>
                           <label for="message">Message</label>
                           <input type="text" id="message" name="message" placeholder="YourMessage..." required>
                           <label for="email">Email</label>
                           <input type="email" id="email" name="email" value="{{current_user.email}}" disabled>
                           <input type="hidden" id="entryid" name="id" value="">
+                          
                           <input type="submit" class="btn" id="nav-tweet-btn" name="submit" value="Tweet" onclick="refresh_table()"> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
                           <button type="button" class="clear_form" id="clear_form">Clear</button>
                         </form>
@@ -118,8 +119,7 @@
         
         //The forEach() method calls a function for each element in an array.
         //The Object.keys() static method returns an array of a given object's own enumerable string-keyed property names.
-
-        Object.keys(contact_data).reverse().forEach(function (i) {
+        Object.keys(contact_data || {}).reverse().forEach(function (i) {
           var data = contact_data[i];
           var para = document.createElement("div");
           
@@ -155,15 +155,13 @@
                       </div>
                   </div>
               </div>
-          </div>
+          </div>`;
 
-          `;
-
-        var element = document.getElementById("post");
-        element.appendChild(para);
+          var element = document.getElementById("post");
+          element.appendChild(para);
         });
+        
       }
-
 
       $(document).ready(function () {
         (function () {

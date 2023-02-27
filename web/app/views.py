@@ -11,7 +11,7 @@ from app import db
 from app import login_manager
 from app.models.contact import Contact
 from app.models.blog_entries import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact, PrivateBlog
+from app.models.authuser import AuthUser, PrivateContact
 
 @app.route('/')
 def home():
@@ -106,7 +106,6 @@ def lab10_remove_contacts():
     return lab10_db_contacts()
 
 @app.route('/lab11', methods=('GET', 'POST'))
-@login_required
 def lab11_microblog():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -134,35 +133,44 @@ def lab11_microblog():
             # if there is no id_: create contact
             if not id_:
                 validated_dict['owner_id'] = current_user.id
-                # entry = Contact(**validated_dict)
-                entry = PrivateBlog(**validated_dict)
+                validated_dict['avatar_url'] = current_user.avatar_url
+                entry = BlogEntry(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
             # if there is an id_ already: update contact
             else:
                 # contact = Contact.query.get(id_)
-                contact = PrivateBlog.query.get(id_)
+                contact = BlogEntry.query.get(id_)
                 if contact.owner_id == current_user.id:
                     contact.update(**validated_dict)
 
             db.session.commit()
-
-
         return lab11_db_blog()
     return render_template('lab11_microblog.html')
 
 @app.route('/lab11/blog')
-@login_required
 def lab11_db_blog():
-    # blog_entries = []
+    blogs = []
     # db_blog = BlogEntry.query.all()
     
-    blog_entries = PrivateBlog.query.filter(
-        PrivateBlog.owner_id == current_user.id)
+    blog_entries = BlogEntry.query.all()
     blogs = list(map(lambda x: x.to_dict(), blog_entries))
     app.logger.debug("DB Contacts: " + str(blogs))
     
     return jsonify(blogs)
+
+'''
+@app.route('/lab11/users')
+def lab11_db_users():
+    
+    contacts = []
+    db_contacts = BlogEntry.query.all()
+
+    contacts = list(map(lambda x: x.to_dict(), db_contacts))
+    app.logger.debug("DB Contacts: " + str(contacts))
+
+    return jsonify(contacts)
+'''
 
 @app.route('/lab11/remove_blog', methods=('GET', 'POST'))
 def lab11_remove_post():
