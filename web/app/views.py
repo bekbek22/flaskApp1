@@ -201,6 +201,7 @@ def lab12_profile():
     return render_template('lab12/profile.html')
 
 @app.route('/lab12/change', methods=('GET', 'POST'))
+@login_required
 def lab12_change():
     if request.method == 'POST':
         #get password
@@ -219,6 +220,7 @@ def lab12_change():
     return render_template('lab12/change.html')
 
 @app.route('/lab12/changeprofile', methods=('GET', 'POST'))
+@login_required
 def lab12_changeprofile():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -227,7 +229,7 @@ def lab12_changeprofile():
         changedata(name, email)
         
         return redirect(url_for('lab12_profile'))
-    return render_template('lab12/change.html')
+    return render_template('lab12/changeprofile.html')
         
 def changedata(name, email):
     db_user = AuthUser.query.filter_by(id = current_user.id).first()

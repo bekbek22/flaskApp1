@@ -148,13 +148,16 @@
                         <br>
                         <span class="tweet-age text-muted" id="datetime_updated">updated: ${data.datetime_updated}</span>
                       </div>
-                      <br>
-                      <div class="row text-muted">
+                      <br>`
+      {% if current_user.is_authenticated %}
+      if({{ current_user.id }} === contact_data[i]['owner_id']) {
+      para.innerHTML += `<div class="row text-muted">
                         <br>
                         <button onclick="prePopulateForm(${data.id})" type="button" class="edit" id="edit">Edit</button>
                         <button onclick="removeItem(${data.id})" type="button" class="remove" id="remove">Remove</button>
-                      </div>
-                  </div>
+                      </div>`
+                    }{% endif %}   
+      para.innerHTML +=`</div>
               </div>
           </div>`;
 
