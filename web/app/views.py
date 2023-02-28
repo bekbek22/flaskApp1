@@ -206,15 +206,11 @@ def lab12_change():
     if request.method == 'POST':
         #get password
         password = request.form.get('password')
-        app.logger.debug("==================")
-        app.logger.debug(current_user.password)
-        app.logger.debug(password)
-        
+
         if not current_user or not check_password_hash(current_user.password, password):
-            app.logger.debug("-=-=-=-=-=-=")
+
             return redirect(url_for('lab12_index'))
         
-        app.logger.debug("5555555555555555555555555555555")
         return redirect(url_for('lab12_changeprofile'))
         
     return render_template('lab12/change.html')

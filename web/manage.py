@@ -25,7 +25,7 @@ def seed_db():
     db.session.add(
        BlogEntry(name='สมชาย ทรงแบด', message='message',
                       email='flask@204212', owner_id=1, 
-                      avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
+                      avatar_url='https://ui-avatars.com/api/?name=สมชาย+ทรงแบด&background=83ee03&color=fff'))
     db.session.add(
        PrivateContact(firstname='ส้มโอ', lastname='โอเค',
                       phone='081-111-1112', owner_id=1))
